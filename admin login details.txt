@@ -1,0 +1,88 @@
+import tkinter as tk
+from tkinter import messagebox
+import mysql.connector
+from mysql.connector import Error
+
+host='localhost'
+user='root'
+password='Babula@143'
+database='adminshell'
+
+# Function to save user data to the database
+def save_to_database():
+    name = name_entry.get()
+    age = age_entry.get()
+    gender = gender_entry.get()
+    contact_number = contact_number_entry.get()
+    email = email_entry.get()
+    passwords = password_entry.get()
+    confirm_password = confirm_password_entry.get()
+
+    if password != confirm_password:
+        messagebox.showerror("Error", "Password and Confirm Password do not match.")
+        return
+
+    try:
+        
+
+        conn = mysql.connector.connect(
+    	host='localhost',
+    	user='root',
+        password='Babula@143'
+        )
+
+        cursor = conn.cursor()
+
+        insert_query = "INSERT INTO admindeatils (name, age, gender, contact_number, email, passwords) VALUES (%s, %s, %s, %s, %s, %s)"
+        cursor.execute(insert_query, (name, age, gender, contact_number, email, password))
+
+        conn.commit()
+        conn.close()
+
+        messagebox.showinfo("Success", "User information saved successfully.")
+    except Error as err:
+        messagebox.showerror("Error", f"Error: {err}")
+root= tk.Tk()
+root.title('powerpro.com/Admin New Login Page')
+root.geometry('600x500')
+
+
+    
+page_label=tk.Label(root,text='ADMIN',bg='Blue',fg='Yellow',font='Arial')
+page_label.place(x=250,y=60)
+
+name=tk.Label(root,text='Name :',bg='yellow',fg='black',padx=10).place(x=150,y=100)
+name_entry=tk.Entry(root)
+name_entry.place(x=285,y=100)
+
+age=tk.Label(root,text='Age :',bg='yellow',fg='black',padx=10).place(x=150,y=150)
+age_entry=tk.Entry(root)
+age_entry.place(x=285,y=150)
+
+gender=tk.Label(root,text='Gender :',bg='yellow',fg='black',padx=10).place(x=150,y=200)
+gender_entry=tk.Entry(root)
+gender_entry.place(x=285,y=200)
+
+contact_number=tk.Label(root,text='Contact Number :',bg='yellow',fg='black',padx=10).place(x=150,y=250)
+contact_number_entry=tk.Entry(root)
+contact_number_entry.place(x=285,y=250)
+
+email=tk.Label(root,text='Email Id :',bg='yellow',fg='black',padx=10).place(x=150,y=300)
+email_entry=tk.Entry(root)
+email_entry.place(x=285,y=300)
+
+password=tk.Label(root,text='Create Password :',bg='yellow',fg='black',padx=10).place(x=150,y=350)
+password_entry=tk.Entry(root,show='*')
+password_entry.place(x=285,y=350)
+
+confirm_password=tk.Label(root,text='Confirm Password :',bg='yellow',fg='black',padx=10).place(x=150,y=400)
+confirm_password_entry=tk.Entry(root,show='*')
+confirm_password_entry.place(x=285,y=400)
+
+btn1=tk.Button(root,text='Submit',command=save_to_database)
+btn1.place(x=250,y=500)
+
+btn2=tk.Button(root,text='Back')
+btn2.place(x=250,y=530)
+
+root.mainloop()
